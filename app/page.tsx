@@ -1,113 +1,140 @@
+"use client";
+import React from "react";
+import {motion, useScroll, useTransform} from "framer-motion";
+import Loader from "../app/Components/Loader";
+import Navbar from "../app/Components/Navbar"
 import Image from "next/image";
+import CenterImage from "../app/Src/ice-removebg-preview.png"
+import Strawberry from "../app/Src/strawberry.png"
+import PedaImage from "../app/Src/product_cards/peda.jpg";
+import PedaPackaged from "../app/Src/product_cards/peda_box.jpg";
 
 export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+
+
+    React.useEffect(() => {
+        (
+            async () => {
+                //@ts-ignore
+                const locomotiveScroll = (await import("locomotive-scroll")).default;
+                const LocomotiveScroll = new locomotiveScroll();
+            }
+        )()
+    }, [])
+
+    const [LoaderTimeout, SetLoaderTimeout] = React.useState(true);
+    setTimeout(() => {
+        SetLoaderTimeout(false)
+    }, 2500);
+
+
+    const {scrollYProgress} = useScroll();
+    const rotate = useTransform(scrollYProgress, [0, 0.9], ["0deg", "360deg"]);
+    const upWards = useTransform(scrollYProgress, [0, 0.25], ["0", "20rem"])
+    const rightWards = useTransform(scrollYProgress, [0, 25], ["0", "35rem"])
+    const backgroundColor = useTransform(scrollYProgress, [0, 0.3], ["#fff", "#d04848"]);
+    const width = useTransform(scrollYProgress, [0, 0.3], ["30vw", "31vw"]);
+    const height = useTransform(scrollYProgress, [0, 0.3], ["30vw", "31vw"]);
+
+    const secondUpWards = useTransform(scrollYProgress, [0, 0.2], ["0", "30rem"])
+    const thirdUpWards = useTransform(scrollYProgress, [0, 0.25], ["0", "20rem"])
+
+
+    return (
+        <React.Fragment>
+            <Navbar/>
+            {LoaderTimeout && <Loader/>}
+
+
+            <motion.main
+                style={{backgroundColor}}
+                className={`relative min-h-[500vh] min-w-screen bg-white`}>
+                <motion.div
+                    animate={{y: 0}}
+                    initial={{y: "-100vh"}}
+                    transition={{duration: 1.5, delay: 1.3, ease: [0.85, 0, 0.15, 1]}}
+                    className={`absolute flex justify-center items-end  pb-[10rem] top-[-15vh] w-screen bg-[#D04848]  h-[75vh] rounded-b-[100%]`}>
+                </motion.div>
+
+
+                <motion.div
+                    style={{y: secondUpWards}}
+                    className={` flex justify-center overflow-hidden items-center rounded-[100%] absolute right-[19rem] top-[22rem] h-[10rem] w-[10rem]`}>
+                    <Image src={Strawberry} alt={""}
+                           className={`w-full h-full object-cover`}/>
+                </motion.div>
+
+
+                <motion.div
+                    style={{y: thirdUpWards}}
+                    className={`flex justify-center overflow-hidden items-center rounded-[100%] absolute left-[19rem] top-[22rem] h-[10rem] w-[10rem]`}>
+                    <Image src={Strawberry} alt={""}
+                           className={`w-full h-full object-cover`}/>
+                </motion.div>
+
+
+                <motion.div
+                    animate={{opacity: 1}}
+                    initial={{opacity: 0}}
+                    transition={{duration: 1.5, delay: 1.3, ease: [0.85, 0, 0.15, 1]}}
+                    className={`flex w-screen text-white absolute top-[10rem] text-[7rem] font-bold justify-center`}>
+                    BARFILI <span className={`text-black ml-3`}>  MASTI</span>
+                </motion.div>
+
+
+                <motion.div className={`absolute top-[19rem] flex justify-center items-center  w-screen`}>
+                    <motion.div
+                        style={{rotate, y: upWards, width, height}}
+                        className={`overflow-hidden rounded-[100%] bg-red-300`}>
+                        <Image src={CenterImage} alt={''} className={`w-full scale-110 h-full object-cover`}/>
+                    </motion.div>
+                </motion.div>
+            </motion.main>
+
+            <div className={`w-screen h-[150vh]  top-[135vh] p-[4rem] absolute`}>
+                <h1 className={`relative mx-[3rem] inline-block text-[4rem] text-white`}>What do we serve?
+                    <div className={`w-full bg-white h-[10px] absolute bottom-0 rounded-xl`}/>
+                </h1>
+
+
+                <div
+                    className={`grid pt-[8rem] w-full min-h-[50vh] gap-x-[2rem] gap-y-[4rem] place-items-center grid-cols-3`}>
+                    <ProductCards mainImage={PedaImage} flipImage={PedaPackaged} mainHeading={'0'} mainPrice={'123'}/>
+                </div>
+            </div>
+
+        </React.Fragment>
+    );
+}
+
+
+interface ProductCardProps {
+    mainImage: any,
+    mainHeading: string,
+    mainPrice: string,
+    flipImage: any
+}
+
+
+const ProductCards = ({mainImage, mainHeading, mainPrice, flipImage}: ProductCardProps) => {
+
+
+    const [IsHovered, SetIsHovered] = React.useState(false);
+    return <div
+
+        onMouseOver={() => SetIsHovered(true)}
+        onMouseOut={() => SetIsHovered(false)}
+        className={`w-[22vw] p-[1rem] rounded-2xl flex flex-col justify-evenly h-[55vh] bg-white`}>
+        <div className={`w-full relative h-[70%]`}>
+            <Image src={mainImage} alt={''} className={`${IsHovered ? `w-full` : `w-0`} top-0 z-[11] h-full object-cover`} />
+            <Image src={mainImage} alt={''} className={`${IsHovered ? `w-0` : `w-full`} top-0 z-[11] h-full object-cover`} />
         </div>
-      </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
+        <h1 className={`w-full text-center py-2 text-black text-[1.5rem]`}>{mainHeading}</h1>
+        <button
+            className={`bg-red-600 border-2 font-bold text-[1.25rem] tracking-wide border-red-600 hover:bg-white hover:text-red-600 text-white w-full rounded-xl p-3 `}>
+            {mainPrice}
+            <span className={`mx-2`}>-</span>
+            Buy
+        </button>
+    </div>
 }
