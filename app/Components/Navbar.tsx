@@ -4,7 +4,7 @@ import {GiStrawberry} from "react-icons/gi";
 import {CiViewList} from "react-icons/ci";
 import {IoCart} from "react-icons/io5";
 
-const Navbar = () => {
+const Navbar = ({setFunction} : {setFunction: Function}) => {
 
     const NavbarOptions: { Name: string, link: string }[] = [
         {Name: "Variations", link: "/variations"},
@@ -34,7 +34,7 @@ const Navbar = () => {
         </h1>
         <motion.ul style={{fontSize: fontSizeTwo}} className={`flex gap-[1.5rem] text-[1.2rem] rounded-xl`}>
             <motion.li
-                className={`hover:bg-white p-4 rounded-xl flex items-center  gap-[0.5rem]`}>
+                className={`hover:scale-110 cursor-default transition-transform duration-300 hover:text-black  p-4 rounded-xl flex items-center  gap-[0.5rem]`}>
                 <motion.div style={{opacity}} className={`text-red-500`}>
                     <CiViewList/>
                 </motion.div>
@@ -42,7 +42,13 @@ const Navbar = () => {
             </motion.li>
 
             <motion.li
-                className={`hover:bg-white p-4 rounded-xl flex items-center gap-[0.5rem]`}>
+                onClick={() => {
+                    setFunction(true);
+                    setTimeout(() => {
+                        window.location.assign("/cart");
+                    }, 1000)
+                }}
+                className={`cursor-default transition-transform duration-300 hover:scale-110 hover:text-black p-4 rounded-xl flex items-center gap-[0.5rem]`}>
                 <motion.div style={{opacity}} className={`text-red-500`}>
                     <IoCart/>
                 </motion.div>

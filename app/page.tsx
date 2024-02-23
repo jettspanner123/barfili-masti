@@ -1,21 +1,34 @@
 "use client";
 import React from "react";
-import {motion, useAnimate, useScroll, useTransform} from "framer-motion";
+import {motion, useInView, useScroll, useTransform} from "framer-motion";
 import Loader from "../app/Components/Loader";
 import Navbar from "../app/Components/Navbar"
 import Image from "next/image";
 import CenterImage from "../app/Src/ice-removebg-preview.png"
 import Strawberry from "../app/Src/strawberry.png"
-import PedaImage from "../app/Src/product_cards/peda.jpg";
-import PedaPackaged from "../app/Src/product_cards/peda_box.jpg";
 import Phoa from "../app/Src/product_cards/poha.jpg";
-import OatMeal from "../app/Src/product_cards/oatmeal.jpg";
+import PhoaPacked from "../app/Src/product_cards/poha_packed.webp";
+import GulabJamun from "../app/Src/product_cards/gulab_jamun.jpg";
+
+import GulabJamunPacked from "../app/Src/product_cards/gulab_jamun_packed.jpg";
+import Noodle from "../app/Src/product_cards/noodle.jpg";
+import NoodlePacked from "../app/Src/product_cards/noodle_packed.jpg";
 import Blueberry from "../app/Src/blueberry.png";
 import {MdArrowForwardIos} from "react-icons/md";
+import TransImage from "@/app/Src/logo_trans.png";
+import IceTeaImage from "@/app/Src/product_cards/ice_tea.jpg";
+import IceTeaPacked from "@/app/Src/product_cards/ice_tea_packed.jpg";
+import AlooBhujiaImage from "@/app/Src/product_cards/allo_bhujia.jpg";
+import AlooBhujiaPacked from "@/app/Src/product_cards/aloo_bhujia_packed.webp";
+import ChocoChips from "@/app/Src/product_cards/choco_chips.jpg";
+import ChocoChipsPacked from "@/app/Src/product_cards/choco_chips_packed.jpg";
+import MangoJuiceImage from "@/app/Src/product_cards/mango_juice.jpg";
+import MangoJuicePacked from "@/app/Src/product_cards/mango_juice_packed.jpg";
+import BannerOne from "./Src/banner_one.jpg";
+import BannerTwo from "./Src/banner_two.jpg";
+import BannerThree from "./Src/banner_three.jpg";
 
 export default function Home() {
-
-
     React.useEffect(() => {
         (
             async () => {
@@ -43,14 +56,23 @@ export default function Home() {
     const secondUpWards = useTransform(scrollYProgress, [0, 0.2], ["0", "30rem"])
     const thirdUpWards = useTransform(scrollYProgress, [0, 0.25], ["0", "20rem"])
 
+    const ImageSliderDiv = React.useRef<HTMLDivElement | null>(null);
+    const [currInt, setCurrentInt] = React.useState(0);
 
-    const [SliderDivRef, AnimateSliderDivRef] = useAnimate();
-    let courCount: number = 1;
-
-
+    const [pageTransition, setPageTransition] = React.useState(false);
+    const lastThing = useTransform(scrollYProgress, [0.75, 1], ["0rem", "-10rem"]);
+    const lastThingTwo = useTransform(scrollYProgress, [0.75, 1], ["0rem", "-40rem"]);
     return (
         <React.Fragment>
-            <Navbar/>
+            {/*this is the transition div*/}
+            <motion.div
+                style={{top: pageTransition ? `0vh` : `-100vh`}}
+                className={`bg-white flex justify-center items-center  transition-all duration-300 ease-out w-screen fixed z-[10000] h-screen`}>
+                <div className={`w-[50vw] h-[50vw] flex justify-center items-center rounded-[100%] `}>
+                    <Image src={TransImage} alt={''} className={`w-[50%] h-[50%] object-cover`}/>
+                </div>
+            </motion.div>
+            <Navbar setFunction={setPageTransition}/>
             {LoaderTimeout && <Loader/>}
 
             <motion.main
@@ -89,11 +111,11 @@ export default function Home() {
                 </motion.div>
 
 
-                <motion.div className={`absolute top-[19rem] flex justify-center items-center  w-screen`}>
+                <motion.div className={`absolute top-[19rem] flex justify-center  items-center  w-screen`}>
                     <motion.div
                         style={{rotate, y: upWards, width, height}}
-                        className={`overflow-hidden rounded-[100%] bg-red-300`}>
-                        <Image src={CenterImage} alt={''} className={`w-full scale-110 h-full object-cover`}/>
+                        className={`overflow-hidden rounded-[100%] bg-red-300 border-8 border-white p-4`}>
+                        <Image src={CenterImage} alt={''} className={`w-full  scale-110 h-full object-cover`}/>
                     </motion.div>
                 </motion.div>
             </motion.main>
@@ -105,19 +127,21 @@ export default function Home() {
 
                 <div
                     className={`grid pt-[8rem] w-full min-h-[50vh] gap-x-[2rem] gap-y-[4rem] place-items-center grid-cols-3`}>
-                    <ProductCards mainImage={PedaImage} flipImage={PedaPackaged} mainHeading={'CN Peda'}
-                                  mainPrice={'123'}/>
-                    <ProductCards mainImage={Phoa} flipImage={PedaPackaged} mainHeading={'CN Peda'} mainPrice={'123'}/>
-                    <ProductCards mainImage={OatMeal} flipImage={PedaPackaged} mainHeading={'CN Peda'}
-                                  mainPrice={'123'}/>
-                    <ProductCards mainImage={PedaImage} flipImage={PedaPackaged} mainHeading={'CN Peda'}
-                                  mainPrice={'123'}/>
-                    <ProductCards mainImage={PedaImage} flipImage={PedaPackaged} mainHeading={'CN Peda'}
-                                  mainPrice={'123'}/>
-                    <ProductCards mainImage={PedaImage} flipImage={PedaPackaged} mainHeading={'CN Peda'}
-                                  mainPrice={'123'}/>
-                    <ProductCards mainImage={PedaImage} flipImage={PedaPackaged} mainHeading={'CN Peda'}
-                                  mainPrice={'123'}/>
+                    <ProductCards mainImage={GulabJamun} flipImage={GulabJamunPacked}
+                                  mainHeading={'Bengali Gulab Ja-moon'}
+                                  mainPrice={'400/kg'}/>
+                    <ProductCards mainImage={Phoa} flipImage={PhoaPacked} mainHeading={'Bihari Poha'}
+                                  mainPrice={'100/kg'}/>
+                    <ProductCards mainImage={AlooBhujiaImage} flipImage={AlooBhujiaPacked} mainHeading={'Aloo Bhujia'}
+                                  mainPrice={'90/kg'}/>
+                    <ProductCards mainImage={IceTeaImage} flipImage={IceTeaPacked} mainHeading={'Lemon Ice Tea'}
+                                  mainPrice={'250'}/>
+                    <ProductCards mainImage={ChocoChips} flipImage={ChocoChipsPacked} mainHeading={'Chocolate Cookies'}
+                                  mainPrice={'350/kg'}/>
+                    <ProductCards mainImage={MangoJuiceImage} flipImage={MangoJuicePacked} mainHeading={'Mango Juice'}
+                                  mainPrice={'50'}/>
+                    <ProductCards mainImage={Noodle} flipImage={NoodlePacked} mainHeading={'Noodles'}
+                                  mainPrice={'100'}/>
                 </div>
             </div>
 
@@ -136,17 +160,49 @@ export default function Home() {
 
                 {/*this is the banner */}
                 <motion.div
-                    ref={SliderDivRef}
-                    className={`bg-blue-300 w-[300vw] h-[60vh] relative flex `}>
-                    <button
-                        className={`hover:bg-white hover:text-black text-red-500 transition-all duration-300 p-4 text-[2rem] top-1/2 -translate-y-1/2 fixed right-0 h-full`}>
-                        <MdArrowForwardIos/></button>
-                    <div className={`h-full w-screen bg-green-300`}></div>
-                    <div className={`h-full w-screen bg-yellow-300`}></div>
-                    <div className={`h-full w-screen bg-pink-300`}></div>
+                    ref={ImageSliderDiv}
+                    style={{
+                        transform: `translate(-${window.innerWidth * currInt}px)`,
+                        transition: `transform 1s cubic-bezier(0.85, 0, 0.15, 1)`
+                    }}
+                    className={` w-[300vw] h-[60vh] relative flex `}>
+                    {
+                        useInView(ImageSliderDiv) && <button
+                            onClick={() => {
+                                if (currInt === 2) setCurrentInt(0);
+                                else setCurrentInt(currInt + 1);
+                            }}
+                            style={{
+                                transform: `translate(0, -50%)`,
+                                right: `${(2 - currInt) * window.innerWidth}px`,
+                            }}
+                            className={`bg-white hover:bg-red-500 hover:text-white text-red-500 transition-all duration-300 p-4 text-[2rem] top-1/2 -translate-y-1/2 fixed right-[] h-full`}>
+                            <MdArrowForwardIos/></button>
+                    }
+                    <div className={`h-full w-screen  flex justify-center items-center`}>
+                        <Image src={BannerOne} alt={''} className={`w-full  h-full object-cover`}/>
+                    </div>
+                    <div className={`h-full w-screen  flex justify-center items-center`}>
+                        <Image src={BannerTwo} alt={''} className={`w-full  h-full object-cover`}/>
+                    </div>
+                    <div className={`h-full w-screen  flex justify-center items-center`}>
+                        <Image src={BannerThree} alt={''} className={`w-full  h-full object-cover`}/>
+                    </div>
                 </motion.div>
+
             </div>
 
+
+            <motion.div
+                style={{y: lastThing}}
+                className={`bg-white flex justify-center items-center shadow-2xl shadow-gray-500 border-t-8 border-red-500 text-white w-screen h-screen z-[300] rounded-t-[2rem] absolute top-[450vh]`}>
+            </motion.div>
+
+            <motion.div
+                style={{y: lastThingTwo}}
+                className={`bg-red-500 flex justify-center items-center shadow-2xl shadow-gray-500 border-t-8 border-red-500 text-white w-screen h-[40rem] z-[300] rounded-t-[2rem] absolute top-[450vh]`}>
+                <Image src={TransImage} alt={''} className={`w-[50vw] h-[50vw] object-cover`}/>
+            </motion.div>
         </React.Fragment>
     );
 }
